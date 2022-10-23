@@ -3,7 +3,7 @@ package com.generali.burritoorderingservice.exception;
 import org.springframework.http.HttpStatus;
 
 
-public class BurritoBusinessValidation extends RuntimeException {
+public class DataValidationException extends RuntimeException {
 	
 	/**
 	 * 
@@ -11,7 +11,7 @@ public class BurritoBusinessValidation extends RuntimeException {
 	private static final long serialVersionUID = 1L;
     private HttpStatus statusCode;
     
-	public BurritoBusinessValidation(String msg, HttpStatus statusCode) {  
+	public DataValidationException(String msg, HttpStatus statusCode) {
 		super(msg);
 		this.statusCode=statusCode;
 	}

@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.generali.burritoorderingservice.dto.OrderLineDTO;
 import com.generali.burritoorderingservice.entity.OrderLine;
-import com.generali.burritoorderingservice.service.IBurritoService;
+import com.generali.burritoorderingservice.service.IDataService;
 
 @RestController
 @RequestMapping("/orders")
-public class BurritoController {
+public class DataController {
 	
 	
-	private IBurritoService iBurritoService;
+	private IDataService iDataService;
 	
-	public BurritoController(IBurritoService iBurritoService) {
-		this.iBurritoService=iBurritoService;
+	public DataController(IDataService iDataService) {
+		this.iDataService = iDataService;
 	}
 	
 	
@@ -33,7 +33,7 @@ public class BurritoController {
      */
     @PostMapping
     public ResponseEntity<List<OrderLine>> create( @RequestBody List<OrderLineDTO> orderLineDTO){
-    	 return new ResponseEntity<>(iBurritoService.createOrder(orderLineDTO), HttpStatus.CREATED);
+    	 return new ResponseEntity<>(iDataService.createOrder(orderLineDTO), HttpStatus.CREATED);
    
     }
     
@@ -43,7 +43,7 @@ public class BurritoController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<List<OrderLine>> show(@PathVariable String id) {
-    	return new ResponseEntity<>(iBurritoService.getOrders(id), HttpStatus.OK);
+    	return new ResponseEntity<>(iDataService.getOrders(id), HttpStatus.OK);
     }
 
     @GetMapping("/")

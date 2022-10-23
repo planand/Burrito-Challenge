@@ -5,7 +5,7 @@ import java.util.List;
 import com.generali.burritoorderingservice.dto.OrderLineDTO;
 import com.generali.burritoorderingservice.entity.OrderLine;
 
-public interface IBurritoService {
+public interface IDataService {
 	
 	public List<OrderLine>  createOrder(List<OrderLineDTO> orderLineDTO);
 

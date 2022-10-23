@@ -12,11 +12,11 @@ import io.swagger.v3.oas.annotations.info.Info;
 @EnableWebMvc
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "BurritoAPI", version = "1.0", description = "Burrito Information"))
-public class BurritoOrderingServiceApplication {
+public class DataServiceApplication {
 
 	public static void main(String[] args) {
 		 
-		SpringApplication.run(BurritoOrderingServiceApplication.class, args);
+		SpringApplication.run(DataServiceApplication.class, args);
 	}
 
 }

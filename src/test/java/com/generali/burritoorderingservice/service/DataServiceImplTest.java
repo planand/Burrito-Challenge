@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.generali.burritoorderingservice.constant.BurritoConstant;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,14 +27,14 @@ import com.generali.burritoorderingservice.entity.Protein;
 import com.generali.burritoorderingservice.entity.Salsa;
 import com.generali.burritoorderingservice.entity.Tortilla;
 import com.generali.burritoorderingservice.entity.Vegetables;
-import com.generali.burritoorderingservice.exception.BurritoBusinessValidation;
+import com.generali.burritoorderingservice.exception.DataValidationException;
 import com.generali.burritoorderingservice.repository.OrderLineRepository;
 import com.generali.burritoorderingservice.repository.OrderRepository;
-import com.generali.burritoorderingservice.validation.IBurritoValidation;
+import com.generali.burritoorderingservice.validation.IDataValidation;
 
 
 @ExtendWith(MockitoExtension.class)
- public class BurritoServiceImplTest {
+ public class DataServiceImplTest {
 
 	private final static String ORDER_ID="921ca4e8-7925-4758-9ce5-6fa986a09535";
 
@@ -46,24 +45,24 @@ import com.generali.burritoorderingservice.validation.IBurritoValidation;
 	private OrderLineRepository orderLineRepository;
 
 	@Mock
-	private IBurritoValidation iBurritoValidation;
+	private IDataValidation iDataValidation;
 
 	@InjectMocks
-	private BurritoServiceImpl  burritoServiceImpl;
+	private DataServiceImpl dataServiceImpl;
 
 	@Test
 	void testCreateOrder() {
 		OrderLineDTO order = line();
 		List<OrderLineDTO> listOrder = new ArrayList<>();
 		listOrder.add(order);
-		List<OrderLine> line = burritoServiceImpl.createOrder(listOrder);
+		List<OrderLine> line = dataServiceImpl.createOrder(listOrder);
 		assertThat(line).isNotNull();
 	}
 
 	@Test
 	 void testGetOrders() {
 		Mockito.when(orderRepository.findByOrderId(ORDER_ID)).thenReturn(Optional.of(new Orders()));
-		List<OrderLine> orders= burritoServiceImpl.getOrders(ORDER_ID);
+		List<OrderLine> orders= dataServiceImpl.getOrders(ORDER_ID);
 		assertThat(orders).isNotNull();
 	}
 
@@ -72,9 +71,9 @@ import com.generali.burritoorderingservice.validation.IBurritoValidation;
 
 	@Test
 	 void testGetOrdersWithBurritoBusinessValidation() {
-		BurritoBusinessValidation exception = Assertions.assertThrows(BurritoBusinessValidation.class, () -> {
-			Mockito.when(orderRepository.findByOrderId(ORDER_ID)).thenThrow(new BurritoBusinessValidation("Exception message test", HttpStatus.NOT_FOUND));
-			burritoServiceImpl.getOrders(ORDER_ID);
+		DataValidationException exception = Assertions.assertThrows(DataValidationException.class, () -> {
+			Mockito.when(orderRepository.findByOrderId(ORDER_ID)).thenThrow(new DataValidationException("Exception message test", HttpStatus.NOT_FOUND));
+			dataServiceImpl.getOrders(ORDER_ID);
 	  });
 
 	  Assertions.assertEquals("Exception message test", exception.getMessage());

@@ -4,7 +4,7 @@ import org.apache.commons.lang3.EnumUtils;
 
 import java.util.UUID;
 
-public class BurritoConstant {
+public class DataConstant {
 	
 	public final static String getUUID() {
 		UUID uuid=UUID.randomUUID();

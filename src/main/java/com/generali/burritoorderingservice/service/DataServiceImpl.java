@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.generali.burritoorderingservice.constant.BurritoConstant;
+import com.generali.burritoorderingservice.constant.DataConstant;
 import com.generali.burritoorderingservice.dto.OrderLineConverter;
 import com.generali.burritoorderingservice.dto.OrderLineDTO;
 import com.generali.burritoorderingservice.entity.Extras;
@@ -21,10 +21,10 @@ import com.generali.burritoorderingservice.entity.Protein;
 import com.generali.burritoorderingservice.entity.Salsa;
 import com.generali.burritoorderingservice.entity.Tortilla;
 import com.generali.burritoorderingservice.entity.Vegetables;
-import com.generali.burritoorderingservice.exception.BurritoBusinessValidation;
+import com.generali.burritoorderingservice.exception.DataValidationException;
 import com.generali.burritoorderingservice.repository.OrderLineRepository;
 import com.generali.burritoorderingservice.repository.OrderRepository;
-import com.generali.burritoorderingservice.validation.IBurritoValidation;
+import com.generali.burritoorderingservice.validation.IDataValidation;
 
 /**
  * @author Paul Ngouabeu
@@ -32,19 +32,19 @@ import com.generali.burritoorderingservice.validation.IBurritoValidation;
  */
 @Transactional
 @Service
-public class BurritoServiceImpl implements IBurritoService {
+public class DataServiceImpl implements IDataService {
 
 	private OrderRepository orderRepository;
 
 	private OrderLineRepository orderLineRepository;
 
-	private IBurritoValidation iBurritoValidation;
+	private IDataValidation iDataValidation;
 
-	public BurritoServiceImpl(OrderRepository orderRepository, OrderLineRepository orderLineRepository,
-			IBurritoValidation iBurritoValidation) {
+	public DataServiceImpl(OrderRepository orderRepository, OrderLineRepository orderLineRepository,
+						   IDataValidation iDataValidation) {
 		this.orderRepository = orderRepository;
 		this.orderLineRepository = orderLineRepository;
-		this.iBurritoValidation = iBurritoValidation;
+		this.iDataValidation = iDataValidation;
 	}
 
 	
@@ -60,7 +60,7 @@ public class BurritoServiceImpl implements IBurritoService {
 		List<OrderLine> theListOrder = new ArrayList<>();
 		Orders order = new Orders();
 		OrderLineConverter cons = new OrderLineConverter();
-		order.setId(BurritoConstant.getUUID());
+		order.setId(DataConstant.getUUID());
 		Set<OrderLine> orderList = new HashSet<>();
 		OrderLine line = cons.convertFromDto(orderLineDTO.get(0));
 		orderList.add(line);
@@ -68,17 +68,17 @@ public class BurritoServiceImpl implements IBurritoService {
 		orderRepository.save(order);
 		
 		for (OrderLineDTO dto : orderLineDTO) {
-			Extras extras = iBurritoValidation.validateExtras(dto);
-			Vegetables vegetables = iBurritoValidation.validateVegetables(dto);
-			Protein protein = iBurritoValidation.validateProtein(dto);
-			Salsa salsa = iBurritoValidation.validateSalsa(dto);
-			Tortilla tortilla = iBurritoValidation.validateTortilla(dto);
+			Extras extras = iDataValidation.validateExtras(dto);
+			Vegetables vegetables = iDataValidation.validateVegetables(dto);
+			Protein protein = iDataValidation.validateProtein(dto);
+			Salsa salsa = iDataValidation.validateSalsa(dto);
+			Tortilla tortilla = iDataValidation.validateTortilla(dto);
 			line.setTortilla(tortilla);
 			line.setSalsa(salsa);
 			line.setProtein(protein);
 			line.setExtras(extras);
 			line.setVegetables(vegetables);
-			line.setId(BurritoConstant.getUUID());
+			line.setId(DataConstant.getUUID());
 			line.setOrders(order);
 			theListOrder.add(orderLineRepository.save(line));
 		}
@@ -99,7 +99,7 @@ public class BurritoServiceImpl implements IBurritoService {
 			List<OrderLine> orders = orderLineRepository.findAllOrderLine(order.get());
 			return orders;
 		} else {
-			throw new BurritoBusinessValidation(id + " doesn't exist in DB as Order",
+			throw new DataValidationException(id + " doesn't exist in DB as Order",
 					HttpStatus.NOT_FOUND);
 		}
 	}

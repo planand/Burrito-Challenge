@@ -7,7 +7,7 @@ import com.generali.burritoorderingservice.entity.Salsa;
 import com.generali.burritoorderingservice.entity.Tortilla;
 import com.generali.burritoorderingservice.entity.Vegetables;
 
-public interface IBurritoValidation {
+public interface IDataValidation {
 	public Protein validateProtein(OrderLineDTO dto);
 
 	public Salsa validateSalsa(OrderLineDTO dto);

@@ -10,8 +10,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 	
-	@ExceptionHandler(BurritoBusinessValidation.class)
-	public ResponseEntity<Object> handleBusinessValidation(BurritoBusinessValidation ex) {
+	@ExceptionHandler(DataValidationException.class)
+	public ResponseEntity<Object> handleBusinessValidation(DataValidationException ex) {
 
 		ErrorModel apiError = new ErrorModel(ex.getStatusCode(), ex.getMessage());
 

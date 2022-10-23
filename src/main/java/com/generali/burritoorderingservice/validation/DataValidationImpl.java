@@ -3,18 +3,17 @@ package com.generali.burritoorderingservice.validation;
 import java.util.Arrays;
 import java.util.Optional;
 
-import org.apache.commons.lang3.EnumUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.generali.burritoorderingservice.constant.BurritoConstant;
+import com.generali.burritoorderingservice.constant.DataConstant;
 import com.generali.burritoorderingservice.dto.OrderLineDTO;
 import com.generali.burritoorderingservice.entity.Extras;
 import com.generali.burritoorderingservice.entity.Protein;
 import com.generali.burritoorderingservice.entity.Salsa;
 import com.generali.burritoorderingservice.entity.Tortilla;
 import com.generali.burritoorderingservice.entity.Vegetables;
-import com.generali.burritoorderingservice.exception.BurritoBusinessValidation;
+import com.generali.burritoorderingservice.exception.DataValidationException;
 import com.generali.burritoorderingservice.repository.ExtrasRepository;
 import com.generali.burritoorderingservice.repository.ProteinRepository;
 import com.generali.burritoorderingservice.repository.SalsaRepository;
@@ -28,7 +27,7 @@ import com.generali.burritoorderingservice.repository.VegetablesRepository;
  *
  */
 @Component
-public class BurritoValidationImpl implements IBurritoValidation {
+public class DataValidationImpl implements IDataValidation {
 
 	private ExtrasRepository extrasRepository;
 
@@ -40,9 +39,9 @@ public class BurritoValidationImpl implements IBurritoValidation {
 
 	private TortillaRepository tortillaRepository;
 
-	public BurritoValidationImpl(ExtrasRepository extrasRepository, VegetablesRepository vegetablesRepository,
-			SalsaRepository salsaRepository, ProteinRepository proteinRepository,
-			TortillaRepository tortillaRepository) {
+	public DataValidationImpl(ExtrasRepository extrasRepository, VegetablesRepository vegetablesRepository,
+							  SalsaRepository salsaRepository, ProteinRepository proteinRepository,
+							  TortillaRepository tortillaRepository) {
 		this.extrasRepository = extrasRepository;
 		this.vegetablesRepository = vegetablesRepository;
 		this.salsaRepository = salsaRepository;
@@ -58,9 +57,9 @@ public class BurritoValidationImpl implements IBurritoValidation {
 	@Override
 	public Protein validateProtein(OrderLineDTO dto) {
 		String protein = dto.getOrderLine().getProtein().getName();
-		if (BurritoConstant.isNotNullOrEmpty(protein) ||
-				!BurritoConstant.isValidChoice(Protein.Value.class, protein)) {
-			throw new BurritoBusinessValidation("Protein should be as follow" +
+		if (DataConstant.isNotNullOrEmpty(protein) ||
+				!DataConstant.isValidChoice(Protein.Value.class, protein)) {
+			throw new DataValidationException("Protein should be as follow" +
 					Arrays.asList(Protein.Value.values()), HttpStatus.BAD_REQUEST);
 		}
 
@@ -68,7 +67,7 @@ public class BurritoValidationImpl implements IBurritoValidation {
 		if (pr.isPresent()) {
 			return pr.get();
 		} else {
-			throw new BurritoBusinessValidation(
+			throw new DataValidationException(
 					dto.getOrderLine().getProtein().getName() + " dont exist in DB as Protein", HttpStatus.BAD_REQUEST);
 		}
 
@@ -81,9 +80,9 @@ public class BurritoValidationImpl implements IBurritoValidation {
 	 */
 	@Override
 	public Salsa validateSalsa(OrderLineDTO dto) {
-		if (BurritoConstant.isNotNullOrEmpty(dto.getOrderLine().getSalsa().getName()) ||
-				!BurritoConstant.isValidChoice(Salsa.Value.class, dto.getOrderLine().getSalsa().getName())) {
-			throw new BurritoBusinessValidation("Salsa should be as follow:" +
+		if (DataConstant.isNotNullOrEmpty(dto.getOrderLine().getSalsa().getName()) ||
+				!DataConstant.isValidChoice(Salsa.Value.class, dto.getOrderLine().getSalsa().getName())) {
+			throw new DataValidationException("Salsa should be as follow:" +
 					Arrays.asList(Salsa.Value.values()), HttpStatus.BAD_REQUEST);
 		}
 
@@ -91,7 +90,7 @@ public class BurritoValidationImpl implements IBurritoValidation {
 		if (ex.isPresent()) {
 			return ex.get();
 		} else {
-			throw new BurritoBusinessValidation(dto.getOrderLine().getSalsa().getName() + " dont exist in DB as Salsa",
+			throw new DataValidationException(dto.getOrderLine().getSalsa().getName() + " dont exist in DB as Salsa",
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -104,9 +103,9 @@ public class BurritoValidationImpl implements IBurritoValidation {
 	 */
 	@Override
 	public Tortilla validateTortilla(OrderLineDTO dto) {
-		if (BurritoConstant.isNotNullOrEmpty(dto.getOrderLine().getTortilla().getName()) ||
-				!BurritoConstant.isValidChoice(Tortilla.Value.class, dto.getOrderLine().getTortilla().getName())) {
-			throw new BurritoBusinessValidation("Tortilla should be as follow:" +
+		if (DataConstant.isNotNullOrEmpty(dto.getOrderLine().getTortilla().getName()) ||
+				!DataConstant.isValidChoice(Tortilla.Value.class, dto.getOrderLine().getTortilla().getName())) {
+			throw new DataValidationException("Tortilla should be as follow:" +
 					Arrays.asList(Tortilla.Value.values()), HttpStatus.BAD_REQUEST);
 		}
 
@@ -114,7 +113,7 @@ public class BurritoValidationImpl implements IBurritoValidation {
 		if (to.isPresent()) {
 			return to.get();
 		} else {
-			throw new BurritoBusinessValidation(
+			throw new DataValidationException(
 					dto.getOrderLine().getTortilla().getName() + " dont exist in DB as Tortilla",
 					HttpStatus.BAD_REQUEST);
 		}
@@ -133,8 +132,8 @@ public class BurritoValidationImpl implements IBurritoValidation {
 				dto.getOrderLine().getExtras().getName().equalsIgnoreCase("")) {
 			return null;
 		}
-		if(!BurritoConstant.isValidChoice(Extras.Value.class, dto.getOrderLine().getExtras().getName())) {
-			throw new BurritoBusinessValidation("Extras can only be as follows:" +
+		if(!DataConstant.isValidChoice(Extras.Value.class, dto.getOrderLine().getExtras().getName())) {
+			throw new DataValidationException("Extras can only be as follows:" +
 					Arrays.asList(Extras.Value.values()), HttpStatus.BAD_REQUEST);
 		}
 
@@ -142,7 +141,7 @@ public class BurritoValidationImpl implements IBurritoValidation {
 		if (ex.isPresent()) {
 			return ex.get();
 		} else {
-			throw new BurritoBusinessValidation(
+			throw new DataValidationException(
 					dto.getOrderLine().getExtras().getName() + " dont exist in DB as Extras", HttpStatus.BAD_REQUEST);
 		}
 
@@ -156,12 +155,12 @@ public class BurritoValidationImpl implements IBurritoValidation {
 	 */
 	@Override
 	public Vegetables validateVegetables(OrderLineDTO dto) {
-		if (BurritoConstant.isNotNullOrEmpty(dto.getOrderLine().getVegetables().getName())) {
+		if (DataConstant.isNotNullOrEmpty(dto.getOrderLine().getVegetables().getName())) {
 			return null;
 		}
 
-		if(!BurritoConstant.isValidChoice(Vegetables.Value.class, dto.getOrderLine().getVegetables().getName())) {
-			throw new BurritoBusinessValidation("Vegetables can only be as follows:" +
+		if(!DataConstant.isValidChoice(Vegetables.Value.class, dto.getOrderLine().getVegetables().getName())) {
+			throw new DataValidationException("Vegetables can only be as follows:" +
 					Arrays.asList(Vegetables.Value.values()), HttpStatus.BAD_REQUEST);
 		}
 
@@ -169,7 +168,7 @@ public class BurritoValidationImpl implements IBurritoValidation {
 		if (ve.isPresent()) {
 			return ve.get();
 		} else {
-			throw new BurritoBusinessValidation(
+			throw new DataValidationException(
 					dto.getOrderLine().getVegetables().getName() + " dont exist in DB as Vegetable",
 					HttpStatus.BAD_REQUEST);
 		}
