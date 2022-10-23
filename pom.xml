@@ -9,11 +9,11 @@
 		<version>2.6.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.generali</groupId>
-	<artifactId>burrito-ordering-service</artifactId>
+	<groupId>com.poc</groupId>
+	<artifactId>data-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>burrito-ordering-service</name>
-	<description>API for ordering custom burritos</description>
+	<name>data-service</name>
+	<description>API for data service</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
