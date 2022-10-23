@@ -18,7 +18,7 @@ An lookup consists of:
 1. Implement controller
 1. Implement repository
 1. Unit and functional tests
-    1. Mock the repository
+    1. Mock the repository for testing
 
 # Restrictions
 * Test
